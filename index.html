@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cunchitos Bakery - Menú Digital</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap');
+        
+        h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* FONDO FIJO */
+        #fixed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; 
+            z-index: -10; 
+            background-color: #fdfbf7; 
+            /* 📸 INDICACIÓN: Cambia 'fondo.jpg' por tu imagen de fondo general */
+            background-image: url('fondo.jpg'); 
+            background-repeat: repeat;
+            background-size: 350px; 
+            transform: translateZ(0); 
+            opacity: 0.2; 
+        }
+
+        /* CLASE PARA RECUADROS COLOR CREMA (USANDO EL HEX #fdecda) */
+        .cream-box {
+            background-color: #fdecda !important; /* Color solicitado */
+            border: 1px solid rgba(244, 114, 182, 0.1); /* Borde muy sutil */
+        }
+
+        .modal { transition: opacity 0.3s ease-in-out; }
+        .modal-content { transition: transform 0.3s ease-in-out; }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+
+<body class="text-gray-900 min-h-screen flex flex-col">
+
+    <div id="fixed-background"></div>
+
+    <header class="bg-white shadow-md z-50 sticky top-0">
+        <nav class="container mx-auto px-4 py-1 flex justify-between items-center">
+            <div class="flex items-center cursor-pointer transition-opacity hover:opacity-80" onclick="showHome()">
+                <img src="logo.jpg" alt="Cunchitos Bakery" class="h-16 md:h-24 w-auto object-contain" onerror="this.onerror=null; this.src='https://placehold.co/200x80/white/d9534f?text=Cunchitos+Bakery';">
+            </div>
+            <button onclick="openCart()" id="main-cart-btn" class="relative p-2 rounded-full text-gray-700 hover:bg-pink-100 transition duration-300">
+                <ion-icon name="cart-outline" class="text-3xl"></ion-icon>
+                <span id="cart-count" class="absolute top-0 right-0 bg-pink-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center opacity-0 transition-opacity">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-4 flex-grow">
+        
+        <div id="categories-view" class="fade-in">
+            <div class="cream-box rounded-lg p-2 mb-6 max-w-xs mx-auto shadow-sm">
+                <h2 class="text-xl md:text-2xl font-bold text-center text-gray-800">Nuestro Menú</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 justify-center max-w-5xl mx-auto">
+                <div onclick="showCategory('pasteles')" class="group cursor-pointer bg-white rounded-xl shadow overflow-hidden border border-pink-100 transform transition duration-300 hover:scale-105 hover:shadow-lg">
+                    <div class="relative h-44 md:h-40 overflow-hidden">
+                        <img src="pasteles.png" alt="Pasteles" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                            <h3 class="text-2xl md:text-2xl text-white font-bold border-b-2 border-pink-500 shadow-sm">Pasteles</h3>
+                        </div>
+                    </div>
+                    <div class="p-2 text-center bg-white"><span class="text-pink-600 font-bold text-[10px] uppercase">Ver Más &rarr;</span></div>
+                </div>
+
+                <div onclick="showCategory('pan_menudo')" class="group cursor-pointer bg-white rounded-xl shadow overflow-hidden border border-pink-100 transform transition duration-300 hover:scale-105 hover:shadow-lg">
+                    <div class="relative h-44 md:h-40 overflow-hidden">
+                        <img src="pandulce.png" alt="Pan Dulce" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center text-center px-1">
+                            <h3 class="text-2xl md:text-2xl text-white font-bold border-b-2 border-pink-500 leading-tight">Pan Dulce</h3>
+                        </div>
+                    </div>
+                    <div class="p-2 text-center bg-white"><span class="text-pink-600 font-bold text-[10px] uppercase">Ver Más &rarr;</span></div>
+                </div>
+
+                <div onclick="showCategory('pan_completo')" class="group cursor-pointer bg-white rounded-xl shadow overflow-hidden border border-pink-100 transform transition duration-300 hover:scale-105 hover:shadow-lg">
+                    <div class="relative h-44 md:h-40 overflow-hidden">
+                        <img src="paracompartir.png" alt="Para Compartir" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center text-center px-1">
+                            <h3 class="text-2xl md:text-2xl text-white font-bold border-b-2 border-pink-500 leading-tight">Para Compartir</h3>
+                        </div>
+                    </div>
+                    <div class="p-2 text-center bg-white"><span class="text-pink-600 font-bold text-[10px] uppercase">Ver Más &rarr;</span></div>
+                </div>
+
+                <div onclick="showCategory('postres')" class="group cursor-pointer bg-white rounded-xl shadow overflow-hidden border border-pink-100 transform transition duration-300 hover:scale-105 hover:shadow-lg">
+                    <div class="relative h-44 md:h-40 overflow-hidden">
+                        <img src="postres.png" alt="Postres" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                            <h3 class="text-2xl md:text-2xl text-white font-bold border-b-2 border-pink-500">Postres</h3>
+                        </div>
+                    </div>
+                    <div class="p-2 text-center bg-white"><span class="text-pink-600 font-bold text-[10px] uppercase">Ver Más &rarr;</span></div>
+                </div>
+
+                <div onclick="showCategory('galletas')" class="group cursor-pointer bg-white rounded-xl shadow overflow-hidden border border-pink-100 transform transition duration-300 hover:scale-105 hover:shadow-lg">
+                    <div class="relative h-44 md:h-40 overflow-hidden">
+                        <img src="galletas.jpg" alt="Galletas" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                            <h3 class="text-2xl md:text-2xl text-white font-bold border-b-2 border-pink-500">Galletas</h3>
+                        </div>
+                    </div>
+                    <div class="p-2 text-center bg-white"><span class="text-pink-600 font-bold text-[10px] uppercase">Ver Más &rarr;</span></div>
+                </div>
+
+                <div onclick="showCategory('antojos')" class="group cursor-pointer bg-white rounded-xl shadow overflow-hidden border border-pink-100 transform transition duration-300 hover:scale-105 hover:shadow-lg">
+                    <div class="relative h-44 md:h-40 overflow-hidden">
+                        <img src="salados.png" alt="Salados" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center text-center px-1">
+                            <h3 class="text-2xl md:text-2xl text-white font-bold border-b-2 border-pink-500 leading-tight">Salados</h3>
+                        </div>
+                    </div>
+                    <div class="p-2 text-center bg-white"><span class="text-pink-600 font-bold text-[10px] uppercase">Ver Más &rarr;</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="products-view" class="hidden fade-in">
+            <div class="flex items-center gap-4 mb-6 cream-box p-3 rounded-xl shadow-sm">
+                <button onclick="showHome()" class="flex items-center gap-2 text-gray-500 hover:text-pink-600 transition font-semibold">
+                    <ion-icon name="arrow-back-outline" class="text-xl"></ion-icon> Volver al Menú
+                </button>
+                <h2 id="category-title" class="text-2xl md:text-3xl font-bold text-gray-800 ml-auto md:ml-0">Productos</h2>
+            </div>
+
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+            <div id="info-box" class="max-w-2xl mx-auto bg-orange-50 border border-orange-200 rounded-lg p-4 mt-8 shadow-sm text-center hidden">
+                <h3 class="text-orange-800 font-bold flex items-center justify-center gap-2 mb-2 text-base">
+                    <ion-icon name="information-circle" class="text-xl"></ion-icon> Información Importante
+                </h3>
+                <ul class="space-y-1 text-gray-700 text-xs md:text-sm">
+                    <li><ion-icon name="calendar" class="text-orange-500 mr-1 align-middle"></ion-icon>Pedidos con <strong>3 días de anticipación</strong>.</li>
+                    <li><ion-icon name="wallet" class="text-orange-500 mr-1 align-middle"></ion-icon>Se requiere <strong>anticipo del 50%</strong>.</li>
+                    <li><ion-icon name="bicycle" class="text-orange-500 mr-1 align-middle"></ion-icon>Precio <strong>no incluye envío</strong>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="custom-builder-view" class="hidden fade-in">
+            <div class="flex items-center gap-4 mb-6 cream-box p-3 rounded-xl shadow-sm">
+                <button onclick="showCategory('pasteles')" class="flex items-center gap-2 text-gray-500 hover:text-pink-600 transition font-semibold">
+                    <ion-icon name="arrow-back-outline" class="text-xl"></ion-icon> Cancelar
+                </button>
+                <h2 class="text-2xl font-bold text-gray-800 ml-auto md:ml-0">Haz tu propio pastel</h2>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <p class="text-center text-gray-600 mb-6 italic cream-box p-2 rounded-lg inline-block w-full">Selecciona cada componente de tu pastel ideal:</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-white rounded-lg shadow border border-pink-100 p-4 flex flex-col">
+                        <h4 class="font-bold text-pink-600 mb-2 border-b pb-1">1. Bizcocho</h4>
+                        <img src="bizcocho.png" class="w-full h-24 object-cover rounded mb-3">
+                        <select id="builder-bizcocho" class="w-full border border-gray-300 rounded p-2 text-sm bg-gray-50 mb-auto">
+                            <option value="Vainilla">Vainilla</option>
+                            <option value="Chocolate">Chocolate</option>
+                            <option value="Marmoleado">Marmoleado</option>
+                            <option value="Banano">Banano</option>
+                            <option value="Red Velvet">Red Velvet</option>
+                            <option value="Naranja">Naranja</option>
+                        </select>
+                    </div>
+                    <div class="bg-white rounded-lg shadow border border-pink-100 p-4 flex flex-col">
+                        <h4 class="font-bold text-pink-600 mb-2 border-b pb-1">2. Relleno</h4>
+                        <img src="relleno.png" class="w-full h-24 object-cover rounded mb-3">
+                        <select id="builder-relleno" class="w-full border border-gray-300 rounded p-2 text-sm bg-gray-50 mb-auto">
+                            <option value="Crema Batida Vainilla">Crema Batida Vainilla</option>
+                            <option value="Crema Batida Café">Crema Batida Café</option>
+                            <option value="Crema Batida Chocolate">Crema Batida Chocolate</option>
+                            <option value="Crema Batida Caramelo">Crema Batida Caramelo</option>
+                            <option value="Crema Batida Galleta">Crema Batida Galleta</option>
+                            <option value="Caramelo">Caramelo</option>
+                            <option value="Crema de Avellana">Crema de Avellana</option>
+                            <option value="Ganache de Chocolate">Ganache de Chocolate</option>
+                            <option value="Crema Bavara">Crema Bavara</option>
+                            <option value="Mermelada de Fresa">Mermelada de Fresa</option>
+                        </select>
+                    </div>
+                    <div class="bg-white rounded-lg shadow border border-pink-100 p-4 flex flex-col">
+                        <h4 class="font-bold text-pink-600 mb-2 border-b pb-1">3. Complemento</h4>
+                        <img src="complemento.png" class="w-full h-24 object-cover rounded mb-3">
+                        <select id="builder-complemento" class="w-full border border-gray-300 rounded p-2 text-sm bg-gray-50 mb-auto">
+                            <option value="Choco chispas">Choco chispas</option>
+                            <option value="Almendras">Almendras</option>
+                            <option value="Marshmallows">Marshmallows</option>
+                            <option value="M&M">M&M</option>
+                            <option value="Melocotón en trozos">Melocotón en trozos</option>
+                            <option value="Galletas">Galletas</option>
+                            <option value="Fresa en trozos">Fresa en trozos</option>
+                        </select>
+                    </div>
+                    <div class="bg-white rounded-lg shadow border border-pink-100 p-4 flex flex-col">
+                        <h4 class="font-bold text-pink-600 mb-2 border-b pb-1">4. Cobertura</h4>
+                        <img src="cobertura.png" class="w-full h-24 object-cover rounded mb-3">
+                        <select id="builder-cobertura" class="w-full border border-gray-300 rounded p-2 text-sm bg-gray-50 mb-auto">
+                            <option value="Crema Batida Vainilla">Crema Batida Vainilla</option>
+                            <option value="Crema Batida Mocca">Crema Batida Mocca</option>
+                            <option value="Crema Batida Chocolate">Crema Batida Chocolate</option>
+                            <option value="Crema Batida Caramelo">Crema Batida Caramelo</option>
+                            <option value="Semi Naked">Semi Naked</option>
+                            <option value="Ganache de Chocolate">Ganache de Chocolate</option>
+                            <option value="Fondant">Fondant</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="addCustomCakeToCart()" class="w-full bg-purple-600 text-white font-bold py-4 rounded-xl text-lg hover:bg-purple-700 shadow-lg flex items-center justify-center gap-2 transform active:scale-95 transition-all mb-8">
+                    <ion-icon name="checkmark-circle" class="text-2xl"></ion-icon> Agregar Pastel al Pedido
+                </button>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded shadow-sm text-center">
+                    <h4 class="text-yellow-700 font-bold mb-1 flex items-center justify-center gap-2">
+                        <ion-icon name="brush"></ion-icon> Diseño
+                    </h4>
+                    <p class="text-sm text-gray-600 italic">Ahora que ya tienes armado tu pastel, solo piensa cómo quieres que se vea y cuando ya lo sepas, ¡Cuéntanos!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t mt-8 py-4 text-center text-gray-500 text-xs">
+        <p>&copy; 2015 Cunchitos Bakery. Hecho con amor.</p>
+    </footer>
+
+    <div id="cart-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none" onclick="if(event.target === this) closeCart()">
+        <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-lg overflow-hidden transform scale-95 h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b bg-pink-50">
+                <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2"><ion-icon name="basket"></ion-icon> Tu Pedido</h3>
+                <button onclick="closeCart()" class="text-gray-500 hover:text-red-500 transition"><ion-icon name="close-circle" class="text-2xl"></ion-icon></button>
+            </div>
+            <div id="cart-items" class="p-4 overflow-y-auto flex-grow bg-gray-50"></div>
+            <div class="p-4 bg-white border-t shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-gray-600">Total Estimado:</span>
+                    <span id="cart-total" class="text-2xl font-bold text-pink-600">$0.00</span>
+                </div>
+                <p class="text-xs text-gray-400 text-center mb-3 italic">* El costo del envío no está incluido.</p>
+                <button onclick="sendWhatsapp()" class="w-full bg-green-500 text-white font-bold py-3 px-5 rounded-xl text-lg flex items-center justify-center gap-2 hover:bg-green-600 transition duration-300 shadow-lg hover:shadow-green-200 transform active:scale-95">
+                    <ion-icon name="logo-whatsapp" class="text-xl"></ion-icon> Enviar Pedido por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const bakeryPhoneNumber = "50372454948";
+
+        /* 📸 INDICACIÓN GENERAL PARA PRODUCTOS: 
+            Busca la propiedad "image" en cada producto para poner tus propias fotos */
+        const products = [
+            // --- PASTELES ---
+            { 
+                id: 999, category: "pasteles", name: "Haz tu propio pastel", 
+                description: "Personaliza bizcocho, relleno y más.", 
+                image: src="personalizado.png",
+                isCustomBuilder: true 
+            },
+            { id: 101, category: "pasteles", name: "Pastel de Tutti-Frutty", description: "Pan de vainilla, remojo de almibar y crema bavara.", image: src="Pastel tutifruti.png", options: [{label: "Pequeño 10-12p", price: 13}, {label: "Mediano 20-25p", price: 20}, {label: "Grande 30-35p", price: 30}, {label: "Extra Grande 45-50p", price: 50}] },
+            { id: 102, category: "pasteles", name: "Caramelo Sútil", description: "Vainilla, crema de caramelo, almendras y remojo de la casa.", image: src="caramelosutil.png", options: [{label: "Pequeño 10-12p", price: 13}, {label: "Mediano 20-25p", price: 20}, {label: "Grande 30-35p", price: 30}, {label: "Extra Grande 45-50p", price: 50}] },
+            { id: 103, category: "pasteles", name: "Chocolate con Fresas", description: "Chocolate relleno de crema de choco/café, ganache y fresas.", image: src="Chocolate con fresas.png", options: [{label: "Pequeño 10-12p", price: 16}, {label: "Mediano 20-25p", price: 25}, {label: "Grande 30-35p", price: 35}, {label: "Extra Grande 45-50p", price: 55}] },
+            { id: 104, category: "pasteles", name: "Cookies and Cream", description: "Chocolate o vainilla, crema de galletas, ganache y trozos.", image: src="cookiesandcream.png", options: [{label: "Pequeño 10-12p", price: 17}, {label: "Mediano 20-25p", price: 28}, {label: "Grande 30-35p", price: 38}, {label: "Extra Grande 45-50p", price: 60}] },
+            { id: 105, category: "pasteles", name: "Fiesta de Dulces", description: "Chocolate o vainilla, crema de caramelo o vainilla y dulces.", image: src="fiestadedulces.png", options: [{label: "Pequeño 10-12p", price: 16}, {label: "Mediano 20-25p", price: 25}, {label: "Grande 30-35p", price: 35}, {label: "Extra Grande 45-50p", price: 55}] },
+
+            // --- PAN DULCE ---
+            { id: 201, category: "pan_menudo", name: "Cachito Simple", description: "", image: src="cachito.png", options: [{label: "Unidad", price: 0.25}] },
+            { id: 202, category: "pan_menudo", name: "Salpor de Arroz", description: "", image: src="salpores.png", options: [{label: "Unidad", price: 0.25}] },
+            { id: 203, category: "pan_menudo", name: "Pastelito de Piña", description: "", image: src="pastelitos.png", options: [{label: "Unidad", price: 0.25}] },
+            { id: 204, category: "pan_menudo", name: "Pastelito de Leche", description: "", image: src="pastelitos.png", options: [{label: "Unidad", price: 0.25}] },
+            { id: 205, category: "pan_menudo", name: "Galleta Sable", description: "", image: src="sable.png", options: [{label: "Unidad", price: 0.25}] },
+            { id: 207, category: "pan_menudo", name: "Santaneca", description: "", image: src="santaneca.png", options: [{label: "Unidad", price: 0.25}] },
+            { id: 208, category: "pan_menudo", name: "Pañuelo de Piña", description: "", image: src="panuelos.png", options: [{label: "Unidad", price: 0.40}] },
+            { id: 209, category: "pan_menudo", name: "Pañuelo de Leche", description: "", image: src="panuelos.png", options: [{label: "Unidad", price: 0.40}] },
+            { id: 210, category: "pan_menudo", name: "Dobladito de Manzana", description: "", image: src="dobladito.png", options: [{label: "Unidad", price: 0.40}] },
+            { id: 211, category: "pan_menudo", name: "Pichardin", description: "", image: src="pichardin.png", options: [{label: "Unidad", price: 0.25}] },
+
+            // --- PARA COMPARTIR ---
+            { id: 301, category: "pan_completo", name: "Quesadilla", description: "", image: src="quesadilla.png", options: [{label: "Unidad", price: 3.50}] },
+            { id: 302, category: "pan_completo", name: "Budín de Guineo", description: "", image: src="budin.png", options: [{label: "Unidad", price: 4.50}] },
+            { id: 303, category: "pan_completo", name: "Budín de Elote", description: "", image: "budinelote.png", options: [{label: "Unidad", price: 15.00}] },
+            { id: 304, category: "pan_completo", name: "Semita Alta", description: "", image: src="semitaalta.png", options: [{label: "Unidad", price: 6.00}] },
+            { id: 305, category: "pan_completo", name: "Semita de Piña", description: "", image: src="semitapacha.png", options: [{label: "Unidad", price: 5.00}] },
+            { id: 306, category: "pan_completo", name: "Semita de Guayaba", description: "", image: src="semitapacha.png", options: [{label: "Unidad", price: 6.00}] },
+            { id: 307, category: "pan_completo", name: "Maria Luisa", description: "", image: src="marialuisa.png", options: [{label: "Unidad", price: 6.00}] },
+
+            // --- POSTRES ---
+            { 
+                id: 401, category: "postres", name: "Tres Leches Individual", description: "", 
+                image: src="3leches.png", 
+                options: [{label: "Individual (5oz)", price: 2.25}],
+                flavors: ["Tradicional", "Caramelo", "Crema de Avellana"]
+            },
+            { 
+                id: 402, category: "postres", name: "Cheesecake Helado Individual", description: "", 
+                image: src="cheesecakeind.png", 
+                options: [{label: "Individual", price: 2.25}],
+                flavors: ["Oreo", "Fresa", "Crema de Avellana", "Caramelo"]
+            },
+            { id: 403, category: "postres", name: "Tiramisu Individual", description: "", image: src="tiramisui.png", options: [{label: "Individual", price: 2.25}] },
+            { id: 404, category: "postres", name: "Pie de Limón Individual", description: "", image: src="limonind.png", options: [{label: "Individual", price: 2.25}] },
+            { id: 405, category: "postres", name: "Tres Leches Completo", description: "", image: src="3lechesfull.png", options: [{label: "Completo", price: 15.00}] },
+            { id: 406, category: "postres", name: "Cheesecake Brownie", description: "", image: src="cheesecakebr.png", options: [{label: "Completo", price: 25.00}] },
+            { id: 407, category: "postres", name: "Cheesecake Helado Completo", description: "", image: src="cheesecake.png", options: [{label: "Completo", price: 25.00}], flavors: ["Oreo", "Fresa", "Crema de Avellana", "Caramelo"] },
+            { id: 408, category: "postres", name: "Flan de Queso de Caramelo", description: "", image: src="flancaramelo.png", options: [{label: "Completo", price: 15.00}] },
+            { id: 411, category: "postres", name: "Flan de Queso con Jalea de Fresa", description: "", image: src="flanfresa.png", options: [{label: "Completo", price: 15.00}] },
+            { id: 409, category: "postres", name: "Pie de Manzana", description: "", image: src="piemanzana.png", options: [{label: "Completo", price: 15.00}] },
+            { id: 410, category: "postres", name: "Pie de Limón Completo", description: "", image: src="lemonpie.png", options: [{label: "Completo", price: 15.00}] },
+
+            // --- GALLETAS ---
+            { id: 501, category: "galletas", name: "Galletas Decoradas", description: "", image: src="decoradas.png", options: [{label: "Personalizada", price: 0.60}] },
+            { id: 502, category: "galletas", name: "Alfajores", description: "", image: src="alfajores.png", options: [{label: "Paquete de 3", price: 1.25}] },
+            { id: 503, category: "galletas", name: "Galletas de Avena", description: "", image: src="avena.png", options: [{label: "Paquete de 3", price: 1.25}] },
+
+            // --- SALADOS ---
+            { id: 602, category: "antojos", name: "Delaware", description: "", image: src="delaware.png", options: [{label: "Unidad", price: 0.40}] },
+            { id: 603, category: "antojos", name: "Enrollados de Salchicha", description: "", image: src="enrollado.png", options: [{label: "Unidad", price: 0.60}] },
+            { id: 604, category: "antojos", name: "Hojaldre de Queso Crema", description: "", image: src="hojaldre.png", options: [{label: "Unidad", price: 0.50}] },
+            { id: 605, category: "antojos", name: "Hojaldre de Jamon y Queso", description: "", image: src="hojaldre.png", options: [{label: "Unidad", price: 0.50}] }
+        ];
+
+        let cart = [];
+
+        function showCategory(categoryName) {
+            const catView = document.getElementById('categories-view');
+            const prodView = document.getElementById('products-view');
+            const customView = document.getElementById('custom-builder-view');
+            const titleEl = document.getElementById('category-title');
+            const infoBox = document.getElementById('info-box');
+            
+            catView.classList.add('hidden');
+            customView.classList.add('hidden');
+            prodView.classList.remove('hidden');
+            
+            const titles = {
+                'pasteles': 'Pasteles',
+                'pan_menudo': 'Pan Dulce',
+                'pan_completo': 'Para Compartir',
+                'postres': 'Postres',
+                'galletas': 'Galletas',
+                'antojos': 'Salados'
+            };
+            titleEl.textContent = titles[categoryName] || 'Productos';
+
+            if(categoryName === 'pasteles') infoBox.classList.remove('hidden');
+            else infoBox.classList.add('hidden');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            const filteredProducts = products.filter(p => p.category === categoryName);
+            renderProducts(filteredProducts, categoryName);
+        }
+
+        function showHome() {
+            document.getElementById('products-view').classList.add('hidden');
+            document.getElementById('custom-builder-view').classList.add('hidden');
+            document.getElementById('categories-view').classList.remove('hidden');
+        }
+
+        function showCustomBuilder() {
+            document.getElementById('products-view').classList.add('hidden');
+            document.getElementById('custom-builder-view').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderProducts(itemsToRender, categoryName) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+            
+            itemsToRender.forEach(product => {
+                let controlsHTML = '';
+
+                if (product.isCustomBuilder) {
+                    controlsHTML = `
+                        <div class="mt-auto">
+                            <button onclick="showCustomBuilder()" class="w-full bg-purple-600 text-white font-bold py-2 rounded text-sm hover:bg-purple-700 flex items-center justify-center gap-2">
+                                <ion-icon name="eye"></ion-icon> Ver Más
+                            </button>
+                        </div>`;
+                }
+                else if (categoryName === 'pasteles') {
+                    let optionsHTML = product.options.map((opt, idx) => `<option value="${idx}">${opt.label} - $${opt.price.toFixed(2)}</option>`).join('');
+                    controlsHTML = `
+                        <div class="mt-auto">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Tamaño:</label>
+                            <select id="select-${product.id}" class="block w-full pl-2 pr-8 py-1 text-sm border-gray-300 rounded-md bg-gray-50 border mb-2">${optionsHTML}</select>
+                            <input type="hidden" id="qty-${product.id}" value="1">
+                            <button onclick="addToCart(${product.id})" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-sm hover:bg-pink-700 flex items-center justify-center gap-2"><ion-icon name="add-circle"></ion-icon> Agregar</button>
+                        </div>`;
+                } 
+                else if (categoryName === 'pan_menudo' || (categoryName === 'galletas' && product.id === 501)) {
+                    let qtyOptions = '';
+                    for(let i=1; i<=100; i++) qtyOptions += `<option value="${i}">${i}</option>`;
+                    controlsHTML = `
+                        <div class="mt-auto">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-lg font-bold text-pink-600">$${product.options[0].price.toFixed(2)}</span>
+                                <div class="flex items-center gap-2">
+                                    <label class="text-[10px] font-bold text-gray-500 uppercase">Cant:</label>
+                                    <select id="qty-${product.id}" class="pl-2 pr-6 py-1 text-sm border-gray-300 rounded-md bg-gray-50 border">${qtyOptions}</select>
+                                </div>
+                            </div>
+                            <input type="hidden" id="select-${product.id}" value="0">
+                            <button onclick="addToCart(${product.id})" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-sm hover:bg-pink-700 flex items-center justify-center gap-2"><ion-icon name="add-circle"></ion-icon> Agregar</button>
+                        </div>`;
+                }
+                else if (categoryName === 'antojos') {
+                    let qtyOptions = '';
+                    for(let i=1; i<=20; i++) qtyOptions += `<option value="${i}">${i}</option>`;
+                    controlsHTML = `
+                        <div class="mt-auto">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-lg font-bold text-pink-600">$${product.options[0].price.toFixed(2)}</span>
+                                <div class="flex items-center gap-2">
+                                    <label class="text-[10px] font-bold text-gray-500 uppercase">Cant:</label>
+                                    <select id="qty-${product.id}" class="pl-2 pr-6 py-1 text-sm border-gray-300 rounded-md bg-gray-50 border">${qtyOptions}</select>
+                                </div>
+                            </div>
+                            <input type="hidden" id="select-${product.id}" value="0">
+                            <button onclick="addToCart(${product.id})" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-sm hover:bg-pink-700 flex items-center justify-center gap-2"><ion-icon name="add-circle"></ion-icon> Agregar</button>
+                        </div>`;
+                }
+                else {
+                    let qtyOptions = '';
+                    for(let i=1; i<=10; i++) qtyOptions += `<option value="${i}">${i}</option>`;
+                    let flavorHTML = '';
+                    if (product.flavors) {
+                        let flavorOpts = product.flavors.map(f => `<option value="${f}">${f}</option>`).join('');
+                        flavorHTML = `<div class="mb-2"><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Sabor:</label><select id="flavor-${product.id}" class="block w-full pl-2 pr-8 py-1 text-sm border-gray-300 rounded-md bg-gray-50 border text-gray-700">${flavorOpts}</select></div>`;
+                    }
+                    let qtyLabel = "Cant:";
+                    if (categoryName === 'galletas' && product.id !== 501) qtyLabel = "Packs:";
+                    controlsHTML = `
+                        <div class="mt-auto">
+                            ${flavorHTML}
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-lg font-bold text-pink-600">$${product.options[0].price.toFixed(2)}</span>
+                                <div class="flex items-center gap-2">
+                                    <label class="text-[10px] font-bold text-gray-500 uppercase">${qtyLabel}</label>
+                                    <select id="qty-${product.id}" class="pl-2 pr-6 py-1 text-sm border-gray-300 rounded-md bg-gray-50 border">${qtyOptions}</select>
+                                </div>
+                            </div>
+                            <input type="hidden" id="select-${product.id}" value="0">
+                            <button onclick="addToCart(${product.id})" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-sm hover:bg-pink-700 flex items-center justify-center gap-2"><ion-icon name="add-circle"></ion-icon> Agregar</button>
+                        </div>`;
+                }
+
+                const productCard = `
+                    <div class="bg-white rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
+                        <div class="relative h-40 overflow-hidden group">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        <div class="p-4 flex flex-col flex-grow">
+                            <h3 class="text-lg font-bold text-gray-800 mb-1 leading-tight">${product.name}</h3>
+                            <p class="text-xs text-gray-500 mb-3 flex-grow italic line-clamp-3">${product.description}</p>
+                            ${controlsHTML}
+                        </div>
+                    </div>`;
+                grid.innerHTML += productCard;
+            });
+        }
+
+        function addCustomCakeToCart() {
+            const bizcocho = document.getElementById("builder-bizcocho").value;
+            const relleno = document.getElementById("builder-relleno").value;
+            const complemento = document.getElementById("builder-complemento").value;
+            const cobertura = document.getElementById("builder-cobertura").value;
+            const customDesc = `\n   - Bizcocho: ${bizcocho}\n   - Relleno: ${relleno}\n   - Compl.: ${complemento}\n   - Cobertura: ${cobertura}`;
+            const uniqueId = `custom-${Date.now()}`;
+
+            cart.push({
+                uniqueId: uniqueId,
+                name: "Haz tu propio pastel",
+                sizeLabel: "Personalizado",
+                price: 0,
+                quantity: 1,
+                image: "https://placehold.co/100x100/9C27B0/ffffff?text=Cake",
+                category: "pasteles",
+                customDetails: customDesc,
+                isCustom: true
+            });
+
+            const btn = document.getElementById('main-cart-btn');
+            if(btn) {
+                btn.classList.add('bg-pink-200', 'scale-110');
+                setTimeout(() => btn.classList.remove('bg-pink-200', 'scale-110'), 200);
+            }
+            
+            showCategory('pasteles'); 
+            updateCartUI();
+            openCart(); 
+        }
+
+        function addToCart(productId) {
+            const productBase = products.find(p => p.id === productId);
+            const selectElement = document.getElementById(`select-${productId}`);
+            const selectedIndex = selectElement ? parseInt(selectElement.value) : 0;
+            const selectedOption = productBase.options[selectedIndex];
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            const quantityToAdd = qtyElement ? parseInt(qtyElement.value) : 1;
+            const flavorElement = document.getElementById(`flavor-${productId}`);
+            let selectedFlavor = flavorElement ? flavorElement.value : null;
+            let customizationDetails = "";
+            const flavorSuffix = selectedFlavor ? `-${selectedFlavor}` : '';
+            const uniqueId = `${productBase.id}-${selectedIndex}${flavorSuffix}`;
+            const existingItem = cart.find(item => item.uniqueId === uniqueId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantityToAdd;
+            } else {
+                let displayName = productBase.name;
+                if (selectedFlavor && !productBase.customConfig) {
+                    displayName += ` - ${selectedFlavor}`;
+                }
+                if (productBase.customConfig) {
+                    displayName += " (Personalizado)";
+                }
+                cart.push({
+                    uniqueId: uniqueId,
+                    name: displayName,
+                    sizeLabel: selectedOption.label,
+                    price: selectedOption.price,
+                    quantity: quantityToAdd,
+                    image: productBase.image,
+                    category: productBase.category,
+                    customDetails: customizationDetails
+                });
+            }
+            
+            const btn = document.getElementById('main-cart-btn');
+            if(btn) {
+                btn.classList.add('bg-pink-200', 'scale-110');
+                setTimeout(() => btn.classList.remove('bg-pink-200', 'scale-110'), 200);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            const countEl = document.getElementById('cart-count');
+            
+            container.innerHTML = '';
+            let total = 0;
+            let totalCount = 0;
+            
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="flex flex-col items-center justify-center h-40 text-gray-400"><ion-icon name="basket-outline" class="text-5xl mb-2 text-gray-300"></ion-icon><p class="text-sm">Carrito vacío</p></div>`;
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price * item.quantity;
+                    totalCount += item.quantity;
+                    
+                    let sizeDisplayText = item.sizeLabel;
+                    if (item.sizeLabel === 'Unidad' || item.sizeLabel === 'Individual' || item.sizeLabel === 'Completo' || item.sizeLabel === 'Personalizada' || item.sizeLabel === 'Personalizado') {
+                        sizeDisplayText = ''; 
+                    }
+
+                    let priceDisplay = `$${item.price.toFixed(2)} x ${item.quantity}`;
+                    let subtotalDisplay = `$${((item.price * item.quantity)).toFixed(2)}`;
+                    
+                    if (item.price === 0) {
+                        priceDisplay = `<span class="text-xs text-purple-600 font-bold">Precio a discutir</span>`;
+                        subtotalDisplay = `-`;
+                    }
+
+                    let detailsHTML = '';
+                    if (item.customDetails) {
+                        detailsHTML = `<p class="text-[9px] text-gray-500 mt-1 leading-tight whitespace-pre-wrap">${item.customDetails.replace(/^\n/, '')}</p>`;
+                    }
+
+                    const cartItem = `
+                        <div class="flex gap-3 mb-3 bg-white p-3 rounded-lg shadow-sm border border-gray-100 items-center">
+                            <img src="${item.image}" class="w-10 h-10 rounded-md object-cover">
+                            <div class="flex-grow">
+                                <h4 class="font-bold text-gray-800 text-xs">${item.name}</h4>
+                                <p class="text-[10px] text-gray-500">${sizeDisplayText}</p>
+                                ${detailsHTML}
+                                <div class="text-pink-600 font-bold text-xs mt-1">${priceDisplay}</div>
+                            </div>
+                            <div class="flex flex-col items-end gap-1">
+                                <span class="font-bold text-xs">${subtotalDisplay}</span>
+                                <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-600 text-lg"><ion-icon name="trash-outline"></ion-icon></button>
+                            </div>
+                        </div>`;
+                    container.innerHTML += cartItem;
+                });
+            }
+            
+            totalEl.textContent = `$${total.toFixed(2)}`;
+            countEl.textContent = totalCount;
+            if (totalCount > 0) countEl.classList.remove('opacity-0'); else countEl.classList.add('opacity-0');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function sendWhatsapp() {
+            if (cart.length === 0) return alert("Agrega productos primero.");
+
+            let message = "Hola Cunchitos Bakery! Me gustaría realizar el siguiente pedido:\n\n";
+            let total = 0;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                let sizeText = '';
+                if (!['Unidad', 'Individual', 'Completo', 'Personalizada', 'Personalizado'].includes(item.sizeLabel)) {
+                    sizeText = `(${item.sizeLabel})`;
+                }
+                
+                let finalName = item.name;
+                if (item.category === 'pasteles' && !item.name.includes("Haz tu propio")) {
+                    if (!finalName.toLowerCase().startsWith('pastel')) {
+                        finalName = "Pastel " + finalName;
+                    }
+                }
+
+                let priceText = `$${subtotal.toFixed(2)}`;
+                if (item.price === 0) priceText = "A discutir";
+
+                message += `- *${finalName} ${sizeText}*\n`;
+                if(item.customDetails) {
+                    message += `   ${item.customDetails.replace(/\n/g, '\n   ')}\n`; 
+                }
+                message += `   Cant: ${item.quantity}  |  Subtotal: ${priceText}\n`;
+                
+                total += subtotal;
+            });
+
+            message += `\n*TOTAL A PAGAR: $${total.toFixed(2)}*`;
+            message += `\n\n*Nota: El costo del envío no está incluido.*`;
+            
+            const hasCustom = cart.some(i => i.price === 0);
+            if(hasCustom) {
+                message += `\n*Nota: El pedido incluye un pastel personalizado cuyo precio se discutirá.*`;
+            }
+
+            window.open(`https://wa.me/${bakeryPhoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function openCart() {
+            const modal = document.getElementById('cart-modal');
+            const content = modal.querySelector('.modal-content');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        function closeCart() {
+            const modal = document.getElementById('cart-modal');
+            const content = modal.querySelector('.modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+        }
+    </script>
+</body>
+</html>
